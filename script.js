@@ -118,11 +118,11 @@ resetBtn.addEventListener("click", function () {
   lowerMinutes = rootTimer[2];
   lowerSeconds = rootTimer[3];
   upperClockTimer.textContent = `${
-    upperMinutes === 0 ? "00" : upperMinutes
-  } : ${upperSeconds === 0 ? "00" : upperSeconds}`;
+    (upperMinutes < 10 ? "0" : "") + upperMinutes
+  } : ${(upperSeconds < 10 ? "0" : "") + upperSeconds}`;
   lowerClockTimer.textContent = `${
-    lowerMinutes === 0 ? "00" : lowerMinutes
-  } : ${lowerSeconds === 0 ? "00" : lowerSeconds}`;
+    (lowerMinutes < 10 ? "0" : "") + lowerMinutes
+  } : ${(lowerSeconds < 10 ? "0" : "") + lowerSeconds}`;
   upperClock.style.background = "#a5a5a5";
   lowerClock.style.background = "#a5a5a5";
 });
