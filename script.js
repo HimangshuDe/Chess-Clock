@@ -14,6 +14,11 @@ const lowerClockTimer = document.querySelector("#clock-timer--lower");
 2. On click or tap event the clock of the opponent party will start running with change in background color to #588157
 3. On initial stage or upon reset the clock stop and set the time to 10:00 and background color #dad7cd
 4. On timer up background will change to red of the current running timer!
+5. Use a flag so that only one clock can run at a time and should not speed up the clock on multiple time clicks
+6. On clicking the clock will switch
+7. Pause and resume functionality
+8. Reset Functionality
+9. Edit time functionality
 
 
 */
@@ -23,6 +28,7 @@ let upperSeconds;
 let lowerMinutes;
 let lowerSeconds;
 let rootTimer = new Array(4);
+let checkerFlag;
 
 let upperTimerId;
 let lowerTimerId;
@@ -104,6 +110,7 @@ playPauseBtn.addEventListener("click", function () {
 
 resetBtn.addEventListener("click", function () {
   isRunning = false;
+  checkerFlag = undefined;
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
   upperMinutes = rootTimer[0];
@@ -122,11 +129,12 @@ resetBtn.addEventListener("click", function () {
 
 editBtn.addEventListener("click", function () {
   isRunning = false;
+  checkerFlag = undefined;
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
-  upperMinutes = Number(prompt("Enter Minutes for Upper Clock")) || 10;
+  upperMinutes = Number(prompt("Enter Minutes for Upper Clock")) || 0;
   upperSeconds = Number(prompt("Enter Seconds for Upper Clock")) || 0;
-  lowerMinutes = Number(prompt("Enter Minutes for Lower Clock")) || 10;
+  lowerMinutes = Number(prompt("Enter Minutes for Lower Clock")) || 0;
   lowerSeconds = Number(prompt("Enter Seconds for Lower Clock")) || 0;
   rootTimer = [upperMinutes, upperSeconds, lowerMinutes, lowerSeconds];
   upperClock.style.background = "#a5a5a5";
@@ -141,26 +149,33 @@ editBtn.addEventListener("click", function () {
 });
 
 upperClock.addEventListener("click", function () {
-  lowerClock.style.background = "#588157";
-  upperClock.style.background = "#a5a5a5";
-  playPauseBtn.src = "images/pause-button.png";
-  timer("lower");
-  stopTimer("upper");
-  isRunning = true;
-  runningTimer = "lower";
+  if (checkerFlag === true || checkerFlag === undefined) {
+    lowerClock.style.background = "#588157";
+    upperClock.style.background = "#a5a5a5";
+    playPauseBtn.src = "images/pause-button.png";
+    timer("lower");
+    stopTimer("upper");
+    isRunning = true;
+    runningTimer = "lower";
+    checkerFlag = false;
+  }
 });
 
 lowerClock.addEventListener("click", function () {
-  upperClock.style.background = "#588157";
-  lowerClock.style.background = "#a5a5a5";
-  playPauseBtn.src = "images/pause-button.png";
-  timer("upper");
-  stopTimer("lower");
-  isRunning = true;
-  runningTimer = "upper";
+  if (checkerFlag === false || checkerFlag === undefined) {
+    upperClock.style.background = "#588157";
+    lowerClock.style.background = "#a5a5a5";
+    playPauseBtn.src = "images/pause-button.png";
+    timer("upper");
+    stopTimer("lower");
+    isRunning = true;
+    runningTimer = "upper";
+    checkerFlag = true;
+  }
 });
 
-window.onload = function () {
+window.onload = async function () {
+  const wakeLock = await navigator.wakeLock.request("screen");
   isRunning = false;
   rootTimer = [10, 0, 10, 0];
   upperMinutes = rootTimer[0];
