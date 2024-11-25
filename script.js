@@ -1,7 +1,8 @@
 "use strict";
 
-const playPauseBtn = document.querySelector(".play-pause--btn");
-const resetBtn = document.querySelector(".reset-btn");
+const playPauseBtn = document.querySelector("#play-pause--btn");
+const resetBtn = document.querySelector("#reset-btn");
+const editBtn = document.querySelector("#edit-btn");
 const upperClock = document.querySelector("#clock--time-upper");
 const lowerClock = document.querySelector("#clock--time-lower");
 const upperClockTimer = document.querySelector("#clock-timer--upper");
@@ -17,10 +18,11 @@ const lowerClockTimer = document.querySelector("#clock-timer--lower");
 
 */
 
-let upperMinutes = 10;
-let upperSeconds = 0;
-let lowerMinutes = 10;
-let lowerSeconds = 0;
+let upperMinutes;
+let upperSeconds;
+let lowerMinutes;
+let lowerSeconds;
+let rootTimer = new Array(4);
 
 let upperTimerId;
 let lowerTimerId;
@@ -29,9 +31,12 @@ let isRunning = false;
 let runningTimer;
 
 const upperClockTimeRunner = function () {
-  if (upperSeconds === 0) {
+  if (upperSeconds === 0 && upperMinutes !== 0) {
     upperMinutes--;
     upperSeconds = 59;
+  } else if (upperMinutes === 0 && upperSeconds === 0) {
+    stopTimer("upper");
+    upperClock.style.background = "#ff0000";
   } else {
     upperSeconds--;
   }
@@ -41,9 +46,12 @@ const upperClockTimeRunner = function () {
 };
 
 const lowerClockTimeRunner = function () {
-  if (lowerSeconds === 0) {
+  if (lowerSeconds === 0 && lowerMinutes !== 0) {
     lowerMinutes--;
     lowerSeconds = 59;
+  } else if (lowerMinutes === 0 && lowerSeconds === 0) {
+    stopTimer("lower");
+    lowerClock.style.background = "#ff0000";
   } else {
     lowerSeconds--;
   }
@@ -98,10 +106,10 @@ resetBtn.addEventListener("click", function () {
   isRunning = false;
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
-  upperMinutes = 10;
-  upperSeconds = 0;
-  lowerMinutes = 10;
-  lowerSeconds = 0;
+  upperMinutes = rootTimer[0];
+  upperSeconds = rootTimer[1];
+  lowerMinutes = rootTimer[2];
+  lowerSeconds = rootTimer[3];
   upperClockTimer.textContent = `${
     upperMinutes === 0 ? "00" : upperMinutes
   } : ${upperSeconds === 0 ? "00" : upperSeconds}`;
@@ -110,6 +118,26 @@ resetBtn.addEventListener("click", function () {
   } : ${lowerSeconds === 0 ? "00" : lowerSeconds}`;
   upperClock.style.background = "#a5a5a5";
   lowerClock.style.background = "#a5a5a5";
+});
+
+editBtn.addEventListener("click", function () {
+  isRunning = false;
+  playPauseBtn.src = "images/play-button-arrowhead.png";
+  stopTimer();
+  upperMinutes = Number(prompt("Enter Minutes for Upper Clock")) || 10;
+  upperSeconds = Number(prompt("Enter Seconds for Upper Clock")) || 0;
+  lowerMinutes = Number(prompt("Enter Minutes for Lower Clock")) || 10;
+  lowerSeconds = Number(prompt("Enter Seconds for Lower Clock")) || 0;
+  rootTimer = [upperMinutes, upperSeconds, lowerMinutes, lowerSeconds];
+  upperClock.style.background = "#a5a5a5";
+  lowerClock.style.background = "#a5a5a5";
+
+  upperClockTimer.textContent = `${
+    (upperMinutes < 10 ? "0" : "") + upperMinutes
+  } : ${(upperSeconds < 10 ? "0" : "") + upperSeconds}`;
+  lowerClockTimer.textContent = `${
+    (lowerMinutes < 10 ? "0" : "") + lowerMinutes
+  } : ${(lowerSeconds < 10 ? "0" : "") + lowerSeconds}`;
 });
 
 upperClock.addEventListener("click", function () {
@@ -131,3 +159,18 @@ lowerClock.addEventListener("click", function () {
   isRunning = true;
   runningTimer = "upper";
 });
+
+window.onload = function () {
+  isRunning = false;
+  rootTimer = [0, 10, 0, 10];
+  upperMinutes = rootTimer[0];
+  upperSeconds = rootTimer[1];
+  lowerMinutes = rootTimer[2];
+  lowerSeconds = rootTimer[3];
+  upperClockTimer.textContent = `${
+    (upperMinutes < 10 ? "0" : "") + upperMinutes
+  } : ${(upperSeconds < 10 ? "0" : "") + upperSeconds}`;
+  lowerClockTimer.textContent = `${
+    (lowerMinutes < 10 ? "0" : "") + lowerMinutes
+  } : ${(lowerSeconds < 10 ? "0" : "") + lowerSeconds}`;
+};

@@ -4,7 +4,8 @@ A simple and customizable chess clock built using HTML, CSS, and JavaScript.
 
 ## Features
 
-- Time control modes: Rapid
+- Time control modes: Flexible (Rapid, Blitz, Tournament)
+- Customization on time control
 - Pause and resume functionality
 - Display of remaining time
 <!-- - Alert system for time expiration -->
@@ -13,6 +14,7 @@ A simple and customizable chess clock built using HTML, CSS, and JavaScript.
 
 1. Start the clock by clicking the "Play" button or tapping on any of the sides.
 2. Pause and resume the clock using the "Pause" and "Resume" buttons.
+3. Clock can be reset using the "Reset" button
 
 ## Technical Details
 
