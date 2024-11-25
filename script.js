@@ -19,8 +19,8 @@ const lowerClockTimer = document.querySelector("#clock-timer--lower");
 7. Pause and resume functionality
 8. Reset Functionality
 9. Edit time functionality
-
-
+10. Add the number of moves played for both the party, start with -1
+11. Add the sound alert system on time up
 */
 
 let upperMinutes;
