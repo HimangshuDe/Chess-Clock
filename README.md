@@ -1,6 +1,6 @@
 # Chess Clock: A Web-Based Time Management Tool for Chess Players
 
-A simple and customizable chess clock built using HTML, CSS, and JavaScript.
+A simple and customizable chess clock built using HTML, CSS, and JavaScript. Check it out [here](https://himangshude.github.io/Chess-Clock/)!
 
 ## Features
 

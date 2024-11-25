@@ -162,7 +162,7 @@ lowerClock.addEventListener("click", function () {
 
 window.onload = function () {
   isRunning = false;
-  rootTimer = [0, 10, 0, 10];
+  rootTimer = [10, 0, 10, 0];
   upperMinutes = rootTimer[0];
   upperSeconds = rootTimer[1];
   lowerMinutes = rootTimer[2];
