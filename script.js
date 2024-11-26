@@ -40,7 +40,7 @@ let upperTimerId;
 let lowerTimerId;
 
 let isRunning = false;
-let runningTimer;
+let runningTimer = "upper";
 
 const upperClockTimeRunner = function () {
   if (upperSeconds === 0 && upperMinutes !== 0) {
@@ -104,7 +104,9 @@ const stopTimer = (clockName) => {
 // Play Pause Event Listener
 playPauseBtn.addEventListener("click", function () {
   if (isRunning === false) {
-    runningTimer === undefined ? (runningTimer = "lower") : runningTimer;
+    // runningTimer === undefined ? (runningTimer = "upper") : runningTimer;
+    totalUpperMoves = 0;
+    totalLowerMoves = 0;
     playPauseBtn.src = "images/pause-button.png";
     isRunning = true;
     timer(runningTimer);
@@ -124,6 +126,7 @@ resetBtn.addEventListener("click", function () {
   lowerMoves.textContent = `Moves: 0`;
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
+  runningTimer = "upper";
   upperMinutes = rootTimer[0];
   upperSeconds = rootTimer[1];
   lowerMinutes = rootTimer[2];
@@ -161,11 +164,13 @@ editBtn.addEventListener("click", function () {
 
 upperClock.addEventListener("click", function () {
   if (checkerFlag === true || checkerFlag === undefined) {
-    if (totalLowerMoves === 0) {
-      totalUpperMoves += 2;
-    } else {
-      totalUpperMoves++;
-    }
+    totalUpperMoves++;
+    totalLowerMoves === -1 ? (totalLowerMoves = 0) : totalLowerMoves;
+    // if (totalLowerMoves === 0) {
+    //   totalUpperMoves += 2;
+    // } else {
+    //   totalUpperMoves++;
+    // }
     upperMoves.textContent = `Moves: ${totalUpperMoves}`;
     lowerClock.style.background = "#588157";
     upperClock.style.background = "#a5a5a5";
@@ -180,11 +185,13 @@ upperClock.addEventListener("click", function () {
 
 lowerClock.addEventListener("click", function () {
   if (checkerFlag === false || checkerFlag === undefined) {
-    if (totalUpperMoves === 0) {
-      totalLowerMoves += 2;
-    } else {
-      totalLowerMoves++;
-    }
+    totalLowerMoves++;
+    totalUpperMoves === -1 ? (totalUpperMoves = 0) : totalUpperMoves;
+    // if (totalUpperMoves === 0) {
+    //   totalLowerMoves += 2;
+    // } else {
+    //   totalLowerMoves++;
+    // }
     lowerMoves.textContent = `Moves: ${totalLowerMoves}`;
     upperClock.style.background = "#588157";
     lowerClock.style.background = "#a5a5a5";
