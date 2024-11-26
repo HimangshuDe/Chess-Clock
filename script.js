@@ -5,6 +5,8 @@ const resetBtn = document.querySelector("#reset-btn");
 const editBtn = document.querySelector("#edit-btn");
 const upperClock = document.querySelector("#clock--time-upper");
 const lowerClock = document.querySelector("#clock--time-lower");
+const upperMoves = document.querySelector("#moves--upper");
+const lowerMoves = document.querySelector("#moves--lower");
 const upperClockTimer = document.querySelector("#clock-timer--upper");
 const lowerClockTimer = document.querySelector("#clock-timer--lower");
 
@@ -21,6 +23,8 @@ const lowerClockTimer = document.querySelector("#clock-timer--lower");
 9. Edit time functionality
 10. Add the number of moves played for both the party, start with -1
 11. Add the sound alert system on time up
+12. Need to add the hour minutes seconds functionality!
+13. Add the time increment functionality
 */
 
 let upperMinutes;
@@ -29,6 +33,8 @@ let lowerMinutes;
 let lowerSeconds;
 let rootTimer = new Array(4);
 let checkerFlag;
+let totalUpperMoves = -1;
+let totalLowerMoves = -1;
 
 let upperTimerId;
 let lowerTimerId;
@@ -95,6 +101,7 @@ const stopTimer = (clockName) => {
   // clearInterval(lowerTimerId);
 };
 
+// Play Pause Event Listener
 playPauseBtn.addEventListener("click", function () {
   if (isRunning === false) {
     runningTimer === undefined ? (runningTimer = "lower") : runningTimer;
@@ -108,9 +115,13 @@ playPauseBtn.addEventListener("click", function () {
   }
 });
 
+// Reset Btn Event Listener
 resetBtn.addEventListener("click", function () {
   isRunning = false;
   checkerFlag = undefined;
+  totalUpperMoves = totalLowerMoves = -1;
+  upperMoves.textContent = `Moves: 0`;
+  lowerMoves.textContent = `Moves: 0`;
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
   upperMinutes = rootTimer[0];
@@ -150,6 +161,12 @@ editBtn.addEventListener("click", function () {
 
 upperClock.addEventListener("click", function () {
   if (checkerFlag === true || checkerFlag === undefined) {
+    if (totalLowerMoves === 0) {
+      totalUpperMoves += 2;
+    } else {
+      totalUpperMoves++;
+    }
+    upperMoves.textContent = `Moves: ${totalUpperMoves}`;
     lowerClock.style.background = "#588157";
     upperClock.style.background = "#a5a5a5";
     playPauseBtn.src = "images/pause-button.png";
@@ -163,6 +180,12 @@ upperClock.addEventListener("click", function () {
 
 lowerClock.addEventListener("click", function () {
   if (checkerFlag === false || checkerFlag === undefined) {
+    if (totalUpperMoves === 0) {
+      totalLowerMoves += 2;
+    } else {
+      totalLowerMoves++;
+    }
+    lowerMoves.textContent = `Moves: ${totalLowerMoves}`;
     upperClock.style.background = "#588157";
     lowerClock.style.background = "#a5a5a5";
     playPauseBtn.src = "images/pause-button.png";
