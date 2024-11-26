@@ -127,10 +127,8 @@ resetBtn.addEventListener("click", function () {
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
   runningTimer = "upper";
-  upperMinutes = rootTimer[0];
-  upperSeconds = rootTimer[1];
-  lowerMinutes = rootTimer[2];
-  lowerSeconds = rootTimer[3];
+  [upperMinutes, upperSeconds, lowerMinutes, lowerSeconds] = [...rootTimer];
+  // console.log(upperMinutes, upperSeconds, lowerMinutes, lowerSeconds);
   upperClockTimer.textContent = `${
     (upperMinutes < 10 ? "0" : "") + upperMinutes
   } : ${(upperSeconds < 10 ? "0" : "") + upperSeconds}`;
@@ -208,10 +206,11 @@ window.onload = async function () {
   const wakeLock = await navigator.wakeLock.request("screen");
   isRunning = false;
   rootTimer = [10, 0, 10, 0];
-  upperMinutes = rootTimer[0];
-  upperSeconds = rootTimer[1];
-  lowerMinutes = rootTimer[2];
-  lowerSeconds = rootTimer[3];
+  // upperMinutes = rootTimer[0];
+  // upperSeconds = rootTimer[1];
+  // lowerMinutes = rootTimer[2];
+  // lowerSeconds = rootTimer[3];
+  [upperMinutes, upperSeconds, lowerMinutes, lowerSeconds] = [...rootTimer];
   upperClockTimer.textContent = `${
     (upperMinutes < 10 ? "0" : "") + upperMinutes
   } : ${(upperSeconds < 10 ? "0" : "") + upperSeconds}`;
