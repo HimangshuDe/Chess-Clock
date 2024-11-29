@@ -42,6 +42,9 @@ let lowerTimerId;
 let isRunning = false;
 let runningTimer = "upper";
 
+let clockTapAudio;
+let btnTapAudio;
+
 const upperClockTimeRunner = function () {
   if (upperSeconds === 0 && upperMinutes !== 0) {
     upperMinutes--;
@@ -97,30 +100,31 @@ const stopTimer = (clockName) => {
     lowerClock.style.background = "#a5a5a5";
     upperClock.style.background = "#a5a5a5";
   }
-  // clearInterval(upperTimerId);
-  // clearInterval(lowerTimerId);
 };
+///////////////////////////////////////////////////////////////
+// Handler Functions
 
-// Play Pause Event Listener
-playPauseBtn.addEventListener("click", function () {
+// Play Pause Handler Function
+const playPauseBtnHandler = function () {
   if (isRunning === false) {
-    // runningTimer === undefined ? (runningTimer = "upper") : runningTimer;
     totalUpperMoves = 0;
     totalLowerMoves = 0;
     playPauseBtn.src = "images/pause-button.png";
     isRunning = true;
+    clockTapAudio.play();
     timer(runningTimer);
   } else {
     playPauseBtn.src = "images/play-button-arrowhead.png";
     isRunning = false;
     stopTimer();
   }
-});
+};
 
-// Reset Btn Event Listener
-resetBtn.addEventListener("click", function () {
+// Reset Btn Handler Function
+const resetBtnHandler = function () {
   isRunning = false;
   checkerFlag = undefined;
+  btnTapAudio.play();
   totalUpperMoves = totalLowerMoves = -1;
   upperMoves.textContent = `Moves: 0`;
   lowerMoves.textContent = `Moves: 0`;
@@ -128,7 +132,6 @@ resetBtn.addEventListener("click", function () {
   stopTimer();
   runningTimer = "upper";
   [upperMinutes, upperSeconds, lowerMinutes, lowerSeconds] = [...rootTimer];
-  // console.log(upperMinutes, upperSeconds, lowerMinutes, lowerSeconds);
   upperClockTimer.textContent = `${
     (upperMinutes < 10 ? "0" : "") + upperMinutes
   } : ${(upperSeconds < 10 ? "0" : "") + upperSeconds}`;
@@ -137,10 +140,12 @@ resetBtn.addEventListener("click", function () {
   } : ${(lowerSeconds < 10 ? "0" : "") + lowerSeconds}`;
   upperClock.style.background = "#a5a5a5";
   lowerClock.style.background = "#a5a5a5";
-});
+};
 
-editBtn.addEventListener("click", function () {
+// Edit Btn Handler Function
+const editBtnHandler = function () {
   isRunning = false;
+  btnTapAudio.play();
   checkerFlag = undefined;
   playPauseBtn.src = "images/play-button-arrowhead.png";
   stopTimer();
@@ -158,17 +163,15 @@ editBtn.addEventListener("click", function () {
   lowerClockTimer.textContent = `${
     (lowerMinutes < 10 ? "0" : "") + lowerMinutes
   } : ${(lowerSeconds < 10 ? "0" : "") + lowerSeconds}`;
-});
+};
 
-upperClock.addEventListener("click", function () {
+/////////////////////////////////////////////////
+// Clock Event Handler Functions
+const upperClockHandler = function () {
   if (checkerFlag === true || checkerFlag === undefined) {
+    clockTapAudio.play();
     totalUpperMoves++;
     totalLowerMoves === -1 ? (totalLowerMoves = 0) : totalLowerMoves;
-    // if (totalLowerMoves === 0) {
-    //   totalUpperMoves += 2;
-    // } else {
-    //   totalUpperMoves++;
-    // }
     upperMoves.textContent = `Moves: ${totalUpperMoves}`;
     lowerClock.style.background = "#588157";
     upperClock.style.background = "#a5a5a5";
@@ -179,17 +182,12 @@ upperClock.addEventListener("click", function () {
     runningTimer = "lower";
     checkerFlag = false;
   }
-});
-
-lowerClock.addEventListener("click", function () {
+};
+const lowerClockHandler = function () {
   if (checkerFlag === false || checkerFlag === undefined) {
+    clockTapAudio.play();
     totalLowerMoves++;
     totalUpperMoves === -1 ? (totalUpperMoves = 0) : totalUpperMoves;
-    // if (totalUpperMoves === 0) {
-    //   totalLowerMoves += 2;
-    // } else {
-    //   totalLowerMoves++;
-    // }
     lowerMoves.textContent = `Moves: ${totalLowerMoves}`;
     upperClock.style.background = "#588157";
     lowerClock.style.background = "#a5a5a5";
@@ -200,16 +198,23 @@ lowerClock.addEventListener("click", function () {
     runningTimer = "upper";
     checkerFlag = true;
   }
-});
+};
+///////////////////////////////////////////////
+// Event listeners
 
+playPauseBtn.addEventListener("click", playPauseBtnHandler);
+resetBtn.addEventListener("click", resetBtnHandler);
+editBtn.addEventListener("click", editBtnHandler);
+upperClock.addEventListener("click", upperClockHandler);
+lowerClock.addEventListener("click", lowerClockHandler);
+
+///////////////////////////////////////////////////////
 window.onload = async function () {
   const wakeLock = await navigator.wakeLock.request("screen");
+  clockTapAudio = new Audio("audio/clock-tap.mp3");
+  btnTapAudio = new Audio("audio/btn-tap.mp3");
   isRunning = false;
   rootTimer = [10, 0, 10, 0];
-  // upperMinutes = rootTimer[0];
-  // upperSeconds = rootTimer[1];
-  // lowerMinutes = rootTimer[2];
-  // lowerSeconds = rootTimer[3];
   [upperMinutes, upperSeconds, lowerMinutes, lowerSeconds] = [...rootTimer];
   upperClockTimer.textContent = `${
     (upperMinutes < 10 ? "0" : "") + upperMinutes
